@@ -1,5 +1,30 @@
 <div class="container">
 
-  GET Anonymous main
+  <div class="span6 offset3">
+    <form class="form-horizontal" action="/login" method="POST">
+      <div class="control-group">
+        <div class="controls">
+          <h3>Please sign in</h3>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Username</label>
+        <div class="controls">
+          <input type="text" name="user" placeholder="Username" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Password</label>
+        <div class="controls">
+          <input type="password" name="passwd" placeholder="Password" />
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button class="btn btn-primary" type="submit">Sign In</button>
+        </div>
+      </div>
+    </form>
+  </div>
 
 </div> <!-- /container -->
