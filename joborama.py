@@ -14,12 +14,16 @@ web.config.debug = False
 urls = (
     '/favicon.ico', 'Favicon',
     '/', 'Home',
+    '/about', 'About',
 )
 
 #-------------------------------------------------------------------------------
 app = web.application( urls, globals() )
 store = web.session.DiskStore( 'sessions' )
 session = web.session.Session( app, store, initializer={'login': 0} )
+
+logg_tmp = web.template.render( 'templates/logged', base="layout" )
+anom_tmp = web.template.render( 'templates/anom', base="layout" )
 
 #-------------------------------------------------------------------------------
 def logged():
@@ -28,9 +32,9 @@ def logged():
 #-------------------------------------------------------------------------------
 def get_render():
     if logged():
-        return web.template.render( 'templates/logged', base="layout" )
+        return logg_tmp
     else:
-        return web.template.render('templates/anom', base="layout" )
+        return anom_tmp
 
 #-------------------------------------------------------------------------------
 class Favicon:
@@ -41,6 +45,11 @@ class Favicon:
 class Home:
     def GET( self ):
         return get_render().main()
+
+#-------------------------------------------------------------------------------
+class About:
+    def GET( self ):
+        return get_render().about()
 
 #-------------------------------------------------------------------------------
 if __name__ == "__main__":
