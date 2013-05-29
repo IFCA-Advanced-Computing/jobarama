@@ -17,6 +17,7 @@ urls = (
     '/about', 'About',
     '/login', 'Login',
     '/login_error', 'LoginError',
+    '/logout', 'Logout',
 )
 
 #-------------------------------------------------------------------------------
@@ -75,6 +76,13 @@ class Login:
 class LoginError:
     def GET( self ):
         return get_render().login_error()
+
+#-------------------------------------------------------------------------------
+class Logout:
+    def GET( self ):
+        session.login = 0
+        session.kill()
+        raise web.seeother('/')
 
 #-------------------------------------------------------------------------------
 if __name__ == "__main__":
