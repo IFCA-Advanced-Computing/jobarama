@@ -1,7 +1,13 @@
+#+STARTUP: showall
+
 * Installation
 
 * Running
 
 * Moreover
 
-** Use a better certificate
+** Use your own certificate
+
+* Acknowledgments
+
+** Use of Bootstrap 2.3.2 [[http://twitter.github.io/bootstrap/]]
