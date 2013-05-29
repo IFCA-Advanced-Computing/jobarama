@@ -22,9 +22,6 @@ app = web.application( urls, globals() )
 store = web.session.DiskStore( 'sessions' )
 session = web.session.Session( app, store, initializer={'login': 0} )
 
-logg_tmp = web.template.render( 'templates/logged', base="layout" )
-anom_tmp = web.template.render( 'templates/anom', base="layout" )
-
 #-------------------------------------------------------------------------------
 def logged():
     return (session.login == 1)
@@ -32,9 +29,9 @@ def logged():
 #-------------------------------------------------------------------------------
 def get_render():
     if logged():
-        return logg_tmp
+        return web.template.render( 'templates/logged', base="layout" )
     else:
-        return anom_tmp
+        return web.template.render( 'templates/anom', base="layout" )
 
 #-------------------------------------------------------------------------------
 class Favicon:
