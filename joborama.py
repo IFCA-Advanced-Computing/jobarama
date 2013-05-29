@@ -2,6 +2,13 @@
 
 #-------------------------------------------------------------------------------
 import web
+from web.wsgiserver import CherryPyWSGIServer
+
+#-------------------------------------------------------------------------------
+CherryPyWSGIServer.ssl_certificate = "cert/server.crt"
+CherryPyWSGIServer.ssl_private_key = "cert/server.key"
+
+web.config.debug = False
 
 #-------------------------------------------------------------------------------
 urls = (
@@ -12,7 +19,7 @@ urls = (
 app = web.application( urls, globals() )
 
 #-------------------------------------------------------------------------------
-class home:        
+class home:
     def GET( self ):
         return "GET main"
 
