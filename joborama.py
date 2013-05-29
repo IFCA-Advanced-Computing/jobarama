@@ -3,6 +3,7 @@
 #-------------------------------------------------------------------------------
 import web
 from web.wsgiserver import CherryPyWSGIServer
+import database
 
 #-------------------------------------------------------------------------------
 CherryPyWSGIServer.ssl_certificate = "cert/server.crt"
@@ -60,7 +61,7 @@ class Login:
         try:
             name = web.input().user
             passwd = web.input().passwd
-            if name == "admin" and passwd == "aa":
+            if database.checkUser( name, passwd ):
                 session.login = 1
             else:
                 session.login = 0
@@ -86,6 +87,7 @@ class Logout:
 
 #-------------------------------------------------------------------------------
 if __name__ == "__main__":
+    database.init()
     app.run()
 
 #-------------------------------------------------------------------------------
