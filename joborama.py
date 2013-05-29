@@ -15,6 +15,8 @@ urls = (
     '/favicon.ico', 'Favicon',
     '/', 'Home',
     '/about', 'About',
+    '/login', 'Login',
+    '/login_error', 'LoginError',
 )
 
 #-------------------------------------------------------------------------------
@@ -47,6 +49,32 @@ class Home:
 class About:
     def GET( self ):
         return get_render().about()
+
+#-------------------------------------------------------------------------------
+class Login:
+    def GET( self ):
+        raise web.seeother('/')
+
+    def POST(self):
+        try:
+            name = web.input().user
+            passwd = web.input().passwd
+            if name == "admin" and passwd == "aa":
+                session.login = 1
+            else:
+                session.login = 0
+        except:
+            session.login = 0
+
+        if logged():
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/login_error')
+
+#-------------------------------------------------------------------------------
+class LoginError:
+    def GET( self ):
+        return get_render().login_error()
 
 #-------------------------------------------------------------------------------
 if __name__ == "__main__":
