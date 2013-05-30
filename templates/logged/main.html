@@ -1,5 +1,51 @@
-<div class="container">
+<div class="container-fluid">
 
-  GET Logged main
+  <div class="row-fluid show-grid">
+    <div class="well well-small span3">
+      Files
+    </div>
+    <div class="well well-small span3">
+      Jobs
+    </div>
+    <div class="span6">
+      <div class="well well-large">
+        <h3>File Upload</h3>
+        <form enctype="multipart/form-data" action="">
+          <input id="filesel" type="file" />
+          <div class="input-prepend input-append">
+            <span class="add-on"><i class="icon-file"></i></span>
+            <input id="filename" class="input-large" type="text" />
+            <a id="filebrowse" class="btn">Browse</a>
+            <button id="filesend" class="btn btn-primary" >
+              <i class="icon-upload"></i> Send
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="well well-large">
+        <h3>New Job</h3>
+      </div>
+    </div>
+  </div>
 
 </div> <!-- /container -->
+
+<script type="text/javascript">
+  $$(function(){
+  filesel = $$('input[id=filesel]');
+  filesel.change(function() {
+  $$('#filename').val($$(this).val());
+  });
+  filesel.css( 'position', 'absolute' );
+  filesel.css( 'visibility', 'hidden' );
+
+  $$('#filebrowse').click(function() {
+  $$('#filesel').click();
+  });
+
+  $$('#filesend').click(function() {
+  alert( 'send' );
+  });
+  });
+</script>
