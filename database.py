@@ -38,8 +38,8 @@ def init():
 def insertUser( name, passwd ):
     conn = sqlite3.connect( database )
     c = conn.cursor()
-    h = bcrypt.hashpw( name, bcrypt.gensalt(BCRYPT_ROUNDS) )
-    c.execute( 'INSERT INTO user VALUES (?,?)', (name,h) )
+    h = bcrypt.hashpw( passwd, bcrypt.gensalt(BCRYPT_ROUNDS) )
+    c.execute( 'INSERT INTO user VALUES (null,?,?)', (name,h) )
     conn.commit()
     conn.close()
 
