@@ -19,6 +19,7 @@ urls = (
     '/login', 'Login',
     '/login_error', 'LoginError',
     '/logout', 'Logout',
+    '/upload', 'Upload',
 )
 
 #-------------------------------------------------------------------------------
@@ -84,6 +85,18 @@ class Logout:
         session.login = 0
         session.kill()
         raise web.seeother('/')
+
+#-------------------------------------------------------------------------------
+class Upload:
+    def GET( self ):
+        raise web.seeother('/')
+
+    def PUT( self ):
+        x = web.input(myfile={})
+        web.debug(x['myfile'].filename)
+        # web.debug(x['myfile'].value) # This is the file contents
+        # web.debug(x['myfile'].file.read()) # Or use a file(-like) object
+        return "OK"
 
 #-------------------------------------------------------------------------------
 if __name__ == "__main__":

@@ -10,17 +10,25 @@
     <div class="span6">
       <div class="well well-large">
         <h3>File Upload</h3>
-        <form enctype="multipart/form-data" action="">
-          <input id="filesel" type="file" />
+        <form id="fileform" enctype="multipart/form-data">
+          <input id="filesel" type="file" name="myfile"/>
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-file"></i></span>
             <input id="filename" class="input-large" type="text" />
             <a id="filebrowse" class="btn">Browse</a>
-            <button id="filesend" class="btn btn-primary" >
-              <i class="icon-upload"></i> Send
-            </button>
+            <a id="filesend" class="btn btn-primary" >
+              <i class="icon-upload"></i> Send</a>
           </div>
         </form>
+
+        <div class="progress">
+          <div id="filebar" class="bar" style="width: 0%;"></div>
+        </div>
+
+        <div id="filealert" class="alert alert-success hide">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          Upload Complete</div>
+
       </div>
 
       <div class="well well-large">
@@ -33,7 +41,7 @@
 
 <script type="text/javascript">
   $$(function(){
-  filesel = $$('input[id=filesel]');
+  var filesel = $$('input[id=filesel]');
   filesel.change(function() {
   $$('#filename').val($$(this).val());
   });
@@ -45,7 +53,32 @@
   });
 
   $$('#filesend').click(function() {
-  alert( 'send' );
+  $$('#filebar').replaceWith('<div id="filebar" class="bar" style="width: 0%;"></div>');
+  $$('#filealert').addClass('hide');
+
+  var xhr = new XMLHttpRequest();
+  if ( xhr.upload ) {
+  xhr.upload.onprogress = function(e) {
+  var done = e.position || e.loaded, total = e.totalSize || e.total;
+  var perc = (Math.floor(done/total*1000)/10);
+  $$('#filebar').css('width', '' + perc + '%' );
+  };
+  }
+  xhr.onreadystatechange = function(e) {
+  if ( 4 == this.readyState ) {
+  $$('#filealert').removeClass('hide');
+  $$('#filebar').css('width', '100%' );
+  $$('#fileform').removeClass('hide');
+  }
+  };
+
+  xhr.open( 'PUT', '/upload', true );
+
+  var form = $$('#fileform')[0];
+  var fd = new FormData( form );
+  xhr.send( fd );
+
+  $$('#fileform').addClass('hide');
   });
   });
 </script>
