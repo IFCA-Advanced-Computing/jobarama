@@ -3,7 +3,10 @@
 #-------------------------------------------------------------------------------
 import web
 from web.wsgiserver import CherryPyWSGIServer
+import os.path
+import sys
 import database
+import data
 
 #-------------------------------------------------------------------------------
 CherryPyWSGIServer.ssl_certificate = "cert/server.crt"
@@ -25,7 +28,7 @@ urls = (
 #-------------------------------------------------------------------------------
 app = web.application( urls, globals() )
 store = web.session.DiskStore( 'sessions' )
-session = web.session.Session( app, store, initializer={'login': 0} )
+session = web.session.Session( app, store, initializer={'login': 0, 'user': None} )
 
 #-------------------------------------------------------------------------------
 def logged():
@@ -37,6 +40,15 @@ def get_render():
         return web.template.render( 'templates/logged', base="layout" )
     else:
         return web.template.render( 'templates/anom', base="layout" )
+
+#-------------------------------------------------------------------------------
+def getUserFilename( filename ):
+    return os.path.join( data.DATADIR, session.user, filename )
+
+#-------------------------------------------------------------------------------
+def clearSession():
+    session.login = 0
+    session.user = None
 
 #-------------------------------------------------------------------------------
 class Favicon:
@@ -64,10 +76,11 @@ class Login:
             passwd = web.input().passwd
             if database.checkUser( name, passwd ):
                 session.login = 1
+                session.user = name
             else:
-                session.login = 0
+                clearSession()
         except:
-            session.login = 0
+            clearSession()
 
         if logged():
             raise web.seeother('/')
