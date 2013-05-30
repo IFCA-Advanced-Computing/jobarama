@@ -106,9 +106,15 @@ class Upload:
 
     def PUT( self ):
         x = web.input(myfile={})
-        web.debug(x['myfile'].filename)
-        # web.debug(x['myfile'].value) # This is the file contents
-        # web.debug(x['myfile'].file.read()) # Or use a file(-like) object
+
+        try:
+            filename = getUserFilename( x['myfile'].filename )
+            data.saveFile( filename, x['myfile'].file )
+            database.insertFile( session.user, x['myfile'].filename )
+        except:
+            print sys.exc_info()
+            web.debug( "can't save file" )
+
         return "OK"
 
 #-------------------------------------------------------------------------------
