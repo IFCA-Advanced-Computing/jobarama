@@ -21,13 +21,11 @@
           </div>
         </form>
 
-        <div class="progress">
-          <div id="filebar" class="bar" style="width: 0%;"></div>
+        <div id="filebar" class="progress">
+          <div class="bar" style="width: 0%;"></div>
         </div>
 
-        <div id="filealert" class="alert alert-success hide">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          Upload Complete</div>
+        <div id="filealert" class="alert alert-success">Upload Complete</div>
 
       </div>
 
@@ -39,46 +37,4 @@
 
 </div> <!-- /container -->
 
-<script type="text/javascript">
-  $$(function(){
-  var filesel = $$('input[id=filesel]');
-  filesel.change(function() {
-  $$('#filename').val($$(this).val());
-  });
-  filesel.css( 'position', 'absolute' );
-  filesel.css( 'visibility', 'hidden' );
-
-  $$('#filebrowse').click(function() {
-  $$('#filesel').click();
-  });
-
-  $$('#filesend').click(function() {
-  $$('#filebar').replaceWith('<div id="filebar" class="bar" style="width: 0%;"></div>');
-  $$('#filealert').addClass('hide');
-
-  var xhr = new XMLHttpRequest();
-  if ( xhr.upload ) {
-  xhr.upload.onprogress = function(e) {
-  var done = e.position || e.loaded, total = e.totalSize || e.total;
-  var perc = (Math.floor(done/total*1000)/10);
-  $$('#filebar').css('width', '' + perc + '%' );
-  };
-  }
-  xhr.onreadystatechange = function(e) {
-  if ( 4 == this.readyState ) {
-  $$('#filealert').removeClass('hide');
-  $$('#filebar').css('width', '100%' );
-  $$('#fileform').removeClass('hide');
-  }
-  };
-
-  xhr.open( 'PUT', '/upload', true );
-
-  var form = $$('#fileform')[0];
-  var fd = new FormData( form );
-  xhr.send( fd );
-
-  $$('#fileform').addClass('hide');
-  });
-  });
-</script>
+<script src="/static/js/main.js"></script>
