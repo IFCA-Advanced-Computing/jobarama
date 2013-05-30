@@ -5,6 +5,7 @@ import os
 import shutil
 
 #-------------------------------------------------------------------------------
+BCRYPT_ROUNDS = 5
 template = 'template.db'
 database = 'database.db'
 
@@ -12,6 +13,15 @@ database = 'database.db'
 def init():
     if not os.path.isfile( database ):
         shutil.copy( template, database )
+
+#-------------------------------------------------------------------------------
+def insertUser( name, passwd ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    h = bcrypt.hashpw( name, bcrypt.gensalt(BCRYPT_ROUNDS) )
+    c.execute( 'INSERT INTO user VALUES (?,?)', (name,h) )
+    conn.commit()
+    conn.close()
 
 #-------------------------------------------------------------------------------
 def checkUser( name, passwd ):
