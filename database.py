@@ -56,3 +56,20 @@ def checkUser( name, passwd ):
     return False
 
 #-------------------------------------------------------------------------------
+def insertFile( user, filename ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'SELECT uid FROM user WHERE name=?', (user,) )
+    uid = c.fetchone()
+    if uid is not None:
+        c.execute( 'SELECT fid FROM file WHERE uid=? AND filename=?', (uid[0],filename) )
+        exists = c.fetchone()
+        if exists is None:
+            c.execute( 'INSERT INTO file VALUES (null,?,?,?)', (uid[0],0,filename) )
+            conn.commit()
+            conn.close()
+    else:
+        conn.close()
+        raise DataBaseError
+
+#-------------------------------------------------------------------------------
