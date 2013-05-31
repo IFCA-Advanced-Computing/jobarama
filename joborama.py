@@ -5,6 +5,7 @@ import web
 from web.wsgiserver import CherryPyWSGIServer
 import os.path
 import sys
+import json
 import database
 import data
 
@@ -23,6 +24,7 @@ urls = (
     '/login_error', 'LoginError',
     '/logout', 'Logout',
     '/upload', 'Upload',
+    '/ajax/file', 'AjaxFile',
 )
 
 #-------------------------------------------------------------------------------
@@ -116,6 +118,16 @@ class Upload:
             web.debug( "can't save file" )
 
         return "OK"
+
+#-------------------------------------------------------------------------------
+class AjaxFile:
+    def GET( self ):
+        if logged():
+            web.header('Content-Type', 'application/json')
+            files = database.getUserFiles( session.user )
+            return json.dumps( files )
+        else:
+            raise web.seeother('/')
 
 #-------------------------------------------------------------------------------
 if __name__ == "__main__":
