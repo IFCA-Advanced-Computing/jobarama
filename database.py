@@ -27,6 +27,10 @@ def mkEmptyDatabase( dbname ):
 
     conn.commit()
 
+    c.execute( "CREATE TABLE job (jid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER)" )
+
+    conn.commit()
+
     conn.close()
 
 #-------------------------------------------------------------------------------
