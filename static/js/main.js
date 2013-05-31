@@ -101,6 +101,7 @@ function refreshFileList(){
         xhr.onreadystatechange = function( e ){
             if( 4 == this.readyState ){
                 alert( "job sended" );
+                refreshJobList();
             }
         };
 
@@ -111,6 +112,31 @@ function refreshFileList(){
         xhr.send( fd );
     });
 
+    refreshJobList();
+
 }(window.jQuery);
+
+function refreshJobList(){
+    $.ajax({
+        dataType: "json",
+        url: '/ajax/job',
+        success: function( data ) {
+            var items = [];
+            var jobs = data['jobs']
+
+            $.each( jobs, function( key, val ) {
+                items.push('<li>' + val['id'] + '</li>');
+            });
+
+            var newlist = $('<ul/>', {
+                'id': 'joblist',
+                'class': 'unstyled',
+                html: items.join('')
+            });
+
+            $('#joblist').replaceWith( newlist );
+        }
+    });
+}
 
 /*=========================================================================== */
