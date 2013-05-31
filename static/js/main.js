@@ -68,9 +68,8 @@ function refreshFileList(){
             var files = data['files']
 
             $.each(files, function( key, val ) {
-                //items1.push('<li id="' + val['id'] + '">' + val['file'] + '</li>');
                 items1.push('<li>' + val['file'] + '</li>');
-                items2.push('<option>' + val['file'] + '</option>');
+                items2.push('<option value="' + val['id'] + '">' + val['file'] + '</option>');
             });
 
             var newlist = $('<ul/>', {
@@ -113,3 +112,5 @@ function refreshFileList(){
     });
 
 }(window.jQuery);
+
+/*=========================================================================== */
