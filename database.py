@@ -78,7 +78,7 @@ def insertFile( user, filename ):
 
 #-------------------------------------------------------------------------------
 def getUserFiles( user ):
-    data = {'files': []}
+    files = []
     conn = sqlite3.connect( database )
     c = conn.cursor()
     c.execute( 'SELECT uid FROM user WHERE name=?', (user,) )
@@ -87,11 +87,11 @@ def getUserFiles( user ):
         c.execute( 'SELECT fid,filename FROM file WHERE uid=? OR global=1', (uid[0],) )
         dbfiles = c.fetchall()
         for f in dbfiles:
-            data['files'] = data['files'] + [{'id': f[0], 'file': f[1]}]
+            files.append( {'id': f[0], 'file': f[1]} )
 
     conn.close()
 
-    return data
+    return files
 
 #-------------------------------------------------------------------------------
 def createJob( user ):

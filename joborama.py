@@ -108,7 +108,7 @@ class AjaxFile:
         if logged():
             web.header('Content-Type', 'application/json')
             files = database.getUserFiles( session.user )
-            return json.dumps( files )
+            return json.dumps( {'files': files} )
         else:
             raise web.seeother('/')
 
