@@ -23,7 +23,6 @@ urls = (
     '/login', 'Login',
     '/login_error', 'LoginError',
     '/logout', 'Logout',
-    '/upload', 'Upload',
     '/ajax/file', 'AjaxFile',
 )
 
@@ -102,30 +101,29 @@ class Logout:
         raise web.seeother('/')
 
 #-------------------------------------------------------------------------------
-class Upload:
-    def GET( self ):
-        raise web.seeother('/')
-
-    def PUT( self ):
-        x = web.input(myfile={})
-
-        try:
-            filename = getUserFilename( x['myfile'].filename )
-            data.saveFile( filename, x['myfile'].file )
-            database.insertFile( session.user, x['myfile'].filename )
-        except:
-            print sys.exc_info()
-            web.debug( "can't save file" )
-
-        return "OK"
-
-#-------------------------------------------------------------------------------
 class AjaxFile:
     def GET( self ):
         if logged():
             web.header('Content-Type', 'application/json')
             files = database.getUserFiles( session.user )
             return json.dumps( files )
+        else:
+            raise web.seeother('/')
+
+    def PUT( self ):
+        if logged():
+            x = web.input(myfile={})
+
+            try:
+                filename = getUserFilename( x['myfile'].filename )
+                data.saveFile( filename, x['myfile'].file )
+                database.insertFile( session.user, x['myfile'].filename )
+            except:
+                print sys.exc_info()
+                web.debug( "can't save file" )
+
+            return "OK"
+
         else:
             raise web.seeother('/')
 

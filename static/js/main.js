@@ -39,7 +39,7 @@
             }
         };
 
-        xhr.open( 'PUT', '/upload', true );
+        xhr.open( 'PUT', '/ajax/file', true );
 
         var form = $('#fileform')[0];
         var fd = new FormData( form );
