@@ -73,3 +73,20 @@ def insertFile( user, filename ):
         raise DataBaseError
 
 #-------------------------------------------------------------------------------
+def getUserFiles( user ):
+    data = {'files': []}
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'SELECT uid FROM user WHERE name=?', (user,) )
+    uid = c.fetchone()
+    if uid is not None:
+        c.execute( 'SELECT fid,filename FROM file WHERE uid=? OR global=1', (uid[0],) )
+        dbfiles = c.fetchall()
+        for f in dbfiles:
+            data['files'] = data['files'] + [{'id': f[0], 'file': f[1]}]
+
+    conn.close()
+
+    return data
+
+#-------------------------------------------------------------------------------
