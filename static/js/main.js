@@ -63,20 +63,31 @@ function refreshFileList(){
         dataType: "json",
         url: '/ajax/file',
         success: function( data ) {
-            var items = [];
+            var items1 = [];
+            var items2 = [];
             var files = data['files']
 
             $.each(files, function( key, val ) {
-                items.push('<li id="' + val['id'] + '">' + val['file'] + '</li>');
+                //items1.push('<li id="' + val['id'] + '">' + val['file'] + '</li>');
+                items1.push('<li>' + val['file'] + '</li>');
+                items2.push('<option>' + val['file'] + '</option>');
             });
 
             var newlist = $('<ul/>', {
                 'id': 'filelist',
                 'class': 'unstyled',
-                html: items.join('')
+                html: items1.join('')
             });
 
             $('#filelist').replaceWith( newlist );
+
+            var newformlist = $('<select/>', {
+                'id': 'jobfile',
+                'name': 'file',
+                html: items2.join('')
+            });
+
+            $('#jobfile').replaceWith( newformlist );
         }
     });
 }
