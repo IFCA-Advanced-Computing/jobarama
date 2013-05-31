@@ -2,7 +2,7 @@
 import random
 
 #-------------------------------------------------------------------------------
-def startJob( var1, fileid ):
+def startJob( user, var1, fileid ):
     jobid = random.randint( 1, 60000 )
     print "RUNNING JOB " + str(jobid)
     print "  var1 = " + var1

@@ -138,7 +138,7 @@ class AjaxJob:
         if logged():
             x = web.input()
             try:
-                pipeline.startJob( x.var1, int(x.file) )
+                pipeline.startJob( session.user, x.var1, int(x.file) )
             except:
                 print sys.exc_info()
                 web.debug( "can't start new job" )
