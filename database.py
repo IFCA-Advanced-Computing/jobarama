@@ -94,3 +94,37 @@ def getUserFiles( user ):
     return data
 
 #-------------------------------------------------------------------------------
+def createJob( user ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'SELECT uid FROM user WHERE name=?', (user,) )
+    uid = c.fetchone()
+    if uid is not None:
+        c.execute( 'INSERT INTO job VALUES (null,?)', (uid[0],) )
+        c.execute( 'SELECT last_insert_rowid() FROM job' )
+        jobid = c.fetchone()[0]
+        conn.commit()
+        conn.close()
+        return jobid
+    else:
+        conn.close()
+        raise DataBaseError
+
+#-------------------------------------------------------------------------------
+def getUserJobs( user ):
+    jobs = []
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'SELECT uid FROM user WHERE name=?', (user,) )
+    uid = c.fetchone()
+    if uid is not None:
+        c.execute( 'SELECT jid FROM job WHERE uid=?', (uid[0],) )
+        dbjobs = c.fetchall()
+        for j in dbjobs:
+            jobs.append( {'id': j[0]} )
+
+    conn.close()
+
+    return jobs
+
+#-------------------------------------------------------------------------------
