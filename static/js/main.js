@@ -91,3 +91,25 @@ function refreshFileList(){
         }
     });
 }
+
+/* = JOB STUFF ============================================================== */
+!function ($) {
+    "use strict"; // jshint ;_;
+
+    $('#jobstart').click( function(){
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function( e ){
+            if( 4 == this.readyState ){
+                alert( "job sended" );
+            }
+        };
+
+        xhr.open( 'POST', '/ajax/job', true );
+
+        var form = $('#jobform')[0];
+        var fd = new FormData( form );
+        xhr.send( fd );
+    });
+
+}(window.jQuery);

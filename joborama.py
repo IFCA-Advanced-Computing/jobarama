@@ -24,6 +24,7 @@ urls = (
     '/login_error', 'LoginError',
     '/logout', 'Logout',
     '/ajax/file', 'AjaxFile',
+    '/ajax/job', 'AjaxJob',
 )
 
 #-------------------------------------------------------------------------------
@@ -124,6 +125,20 @@ class AjaxFile:
 
             return "OK"
 
+        else:
+            raise web.seeother('/')
+
+#-------------------------------------------------------------------------------
+class AjaxJob:
+    def GET( self ):
+        raise web.seeother('/')
+
+    def POST( self ):
+        if logged():
+            x = web.input()
+            web.debug( x )
+
+            return "OK"
         else:
             raise web.seeother('/')
 
