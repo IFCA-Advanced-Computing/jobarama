@@ -8,6 +8,7 @@ import sys
 import json
 import database
 import data
+import pipeline
 
 #-------------------------------------------------------------------------------
 CherryPyWSGIServer.ssl_certificate = "cert/server.crt"
@@ -136,7 +137,11 @@ class AjaxJob:
     def POST( self ):
         if logged():
             x = web.input()
-            web.debug( x )
+            try:
+                pipeline.startJob( x.var1, int(x.file) )
+            except:
+                print sys.exc_info()
+                web.debug( "can't start new job" )
 
             return "OK"
         else:
