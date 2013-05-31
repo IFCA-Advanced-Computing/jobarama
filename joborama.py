@@ -132,7 +132,12 @@ class AjaxFile:
 #-------------------------------------------------------------------------------
 class AjaxJob:
     def GET( self ):
-        raise web.seeother('/')
+        if logged():
+            web.header('Content-Type', 'application/json')
+            jobs = database.getUserJobs( session.user )
+            return json.dumps( {'jobs': jobs} )
+        else:
+            raise web.seeother('/')
 
     def POST( self ):
         if logged():
