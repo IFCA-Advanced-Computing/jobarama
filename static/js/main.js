@@ -35,6 +35,7 @@
                 $('#filebar').removeClass( 'active' )
                 $('#fileform').css( 'visibility', 'visible' );
                 $('#filealert').css( 'visibility', 'visible' );
+                refreshFileList();
             }
         };
 
@@ -48,3 +49,34 @@
     });
 
 }(window.jQuery);
+
+/* = FILE LIST ============================================================== */
+!function ($) {
+    "use strict"; // jshint ;_;
+
+    refreshFileList();
+
+}(window.jQuery);
+
+function refreshFileList(){
+    $.ajax({
+        dataType: "json",
+        url: '/ajax/file',
+        success: function( data ) {
+            var items = [];
+            var files = data['files']
+
+            $.each(files, function( key, val ) {
+                items.push('<li id="' + val['id'] + '">' + val['file'] + '</li>');
+            });
+
+            var newlist = $('<ul/>', {
+                'id': 'filelist',
+                'class': 'unstyled',
+                html: items.join('')
+            });
+
+            $('#filelist').replaceWith( newlist );
+        }
+    });
+}
