@@ -27,6 +27,7 @@ urls = (
     '/ajax/file', 'AjaxFiles',
     '/ajax/job', 'AjaxJobs',
     '/job/(.*)', 'Job',
+    '/file/(.*)', 'File',
 )
 
 #-------------------------------------------------------------------------------
@@ -146,6 +147,14 @@ class AjaxJobs:
                 web.debug( "can't start new job" )
 
             return "OK"
+        else:
+            raise web.seeother('/')
+
+#-------------------------------------------------------------------------------
+class File:
+    def GET( self, fileid ):
+        if logged():
+            return "get file " + str(fileid)
         else:
             raise web.seeother('/')
 

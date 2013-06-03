@@ -25,6 +25,6 @@ $def with( jobinfo )
   <ul>
     $for f in jobinfo['files']:
         $if f['type'] == 1:
-            <li> $f['name'] </li>
+            <li><a href="/file/$f['fid']"> $f['name'] </a></li>
   </ul>
 </div> <!-- /container -->
