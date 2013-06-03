@@ -18,11 +18,11 @@ reJOBID = re.compile(r"Submitted batch job (?P<slurmid>\d+)")
 def startJob( user, var1, fileid ):
     jobid = database.createJob( user )
 
-    p = multiprocessing.Process( target=runjob, args=(jobid, var1, fileid ) )
+    p = multiprocessing.Process( target=runjob, args=(user, jobid, var1, fileid ) )
     p.start()
 
 #-------------------------------------------------------------------------------
-def runjob( jobid, var1, fileid ):
+def runjob( user, jobid, var1, fileid ):
     print "RUNNING JOB " + str(jobid)
 
     # stagein
@@ -35,7 +35,7 @@ def runjob( jobid, var1, fileid ):
     database.addJobFile( jobid, fileid, database.FILEIN )
 
     # submit
-    command = ["ssh", remotehost, "./launch_pipeline.sh", var1, remotefile ]
+    command = ["ssh", remotehost, "./launch_pipeline.sh", user, var1, remotefile ]
     proc = subprocess.Popen( command, stdout=subprocess.PIPE )
     output = proc.communicate()[0]
     mm = reJOBID.search( output )
