@@ -182,6 +182,22 @@ def setJobSubmitted( jobid, slurmid ):
     conn.close()
 
 #-------------------------------------------------------------------------------
+def setJobRunning( jobid ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'UPDATE job SET state=2 WHERE jid=?', (jobid,) )
+    conn.commit()
+    conn.close()
+
+#-------------------------------------------------------------------------------
+def setJobCompleted( jobid ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'UPDATE job SET state=3 WHERE jid=?', (jobid,) )
+    conn.commit()
+    conn.close()
+
+#-------------------------------------------------------------------------------
 def getJobInfo( jobid ):
     conn = sqlite3.connect( database )
     c = conn.cursor()
