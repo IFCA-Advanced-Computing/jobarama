@@ -251,3 +251,23 @@ def getActiveJobs():
     return jobs
 
 #-------------------------------------------------------------------------------
+def isJobFromUser( jobid, user ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'SELECT uid FROM user WHERE name=?', (user,) )
+    udata = c.fetchone()
+    if udata is None:
+        conn.close()
+        return false
+
+    c.execute( 'SELECT uid FROM job WHERE jid=?', (jobid,) )
+    jdata = c.fetchone()
+    if jdata is None:
+        conn.close()
+        return false
+
+    conn.close()
+
+    return jdata[0] == udata[0]
+
+#-------------------------------------------------------------------------------

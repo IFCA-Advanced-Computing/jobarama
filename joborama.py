@@ -162,8 +162,11 @@ class File:
 class Job:
     def GET( self, jobid ):
         if logged():
-            jobinfo = database.getJobInfo( jobid )
-            return get_render().job( jobinfo )
+            if database.isJobFromUser( jobid, session.user ):
+                jobinfo = database.getJobInfo( jobid )
+                return get_render().job( jobinfo )
+            else:
+                return get_render().notallowed()
         else:
             raise web.seeother('/')
 
