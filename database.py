@@ -11,10 +11,10 @@ template = 'ddbb/template.db'
 database = 'ddbb/database.db'
 
 # JOB STATE
-#  0 = Just Created
-#  1 = Submitted
-#  2 = Running
-#  3 = Completed
+JOB_CREATED = 0   # Just Created
+JOB_SUBMITTED = 1 # Submitted
+JOB_RUNNING = 2   # Running
+JOB_COMPLETED = 3 # Completed
 
 # JOB FILE TYPE
 FILEIN = 0
