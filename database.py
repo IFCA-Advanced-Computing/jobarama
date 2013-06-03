@@ -146,6 +146,26 @@ def getFileFullName( fid ):
     return data.getUserFilename( udata[0], fdata[1] )
 
 #-------------------------------------------------------------------------------
+def isFileAllowedFromUser( fileid, user ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'SELECT uid FROM user WHERE name=?', (user,) )
+    udata = c.fetchone()
+    if udata is None:
+        conn.close()
+        return False
+
+    c.execute( 'SELECT uid,global FROM file WHERE fid=?', (fileid,) )
+    fdata = c.fetchone()
+    if fdata is None:
+        conn.close()
+        return False
+
+    conn.close()
+
+    return fdata[1] != 0 or fdata[0] == udata[0]
+
+#-------------------------------------------------------------------------------
 def createJob( user ):
     conn = sqlite3.connect( database )
     c = conn.cursor()
@@ -258,13 +278,13 @@ def isJobFromUser( jobid, user ):
     udata = c.fetchone()
     if udata is None:
         conn.close()
-        return false
+        return False
 
     c.execute( 'SELECT uid FROM job WHERE jid=?', (jobid,) )
     jdata = c.fetchone()
     if jdata is None:
         conn.close()
-        return false
+        return False
 
     conn.close()
 

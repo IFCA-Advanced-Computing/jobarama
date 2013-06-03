@@ -154,7 +154,10 @@ class AjaxJobs:
 class File:
     def GET( self, fileid ):
         if logged():
-            return "get file " + str(fileid)
+            if database.isFileAllowedFromUser( fileid, session.user ):
+                return "get file " + str(fileid)
+            else:
+                return get_render().notallowed()
         else:
             raise web.seeother('/')
 
