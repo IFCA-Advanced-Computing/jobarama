@@ -26,6 +26,7 @@ urls = (
     '/logout', 'Logout',
     '/ajax/file', 'AjaxFile',
     '/ajax/job', 'AjaxJob',
+    '/job/(.*)', 'Job',
 )
 
 #-------------------------------------------------------------------------------
@@ -145,6 +146,14 @@ class AjaxJob:
                 web.debug( "can't start new job" )
 
             return "OK"
+        else:
+            raise web.seeother('/')
+
+#-------------------------------------------------------------------------------
+class Job:
+    def GET( self, jobid ):
+        if logged():
+            return get_render().job( jobid )
         else:
             raise web.seeother('/')
 
