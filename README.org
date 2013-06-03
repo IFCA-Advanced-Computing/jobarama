@@ -1,13 +1,24 @@
 #+STARTUP: showall
 
-* Installation
+** Installation
 
-* Running
+** Running
 
-* Moreover
+   Start the web server with:
 
-** Use your own certificate
+   #+begin_src bash
+   python joborama.py
+   #+end_src
 
-* Acknowledgments
+   Open the main page in your web browser, usually https://localhost:8080
 
-** Use of Bootstrap 2.3.2 [[http://twitter.github.io/bootstrap/]]
+** Moreover
+
+*** Use your own certificate
+*** Change to another DDBB Manager
+*** Update to run in another cluster
+*** Update to your own pipeline
+
+** Acknowledgments
+  - Bootstrap 2.3.2 [[http://twitter.github.io/bootstrap/]]
+  - JQuery 2.0.1 [[http://jquery.com/]]
