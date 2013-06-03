@@ -53,6 +53,9 @@ def clearDB():
 
 #-------------------------------------------------------------------------------
 def init():
+    if not os.path.isfile( template ):
+        clearDB()
+
     if not os.path.isfile( database ):
         shutil.copy( template, database )
 
