@@ -4,6 +4,7 @@ import os
 from os import path
 import subprocess
 import re
+import time
 import config
 import database
 
@@ -44,5 +45,20 @@ def runjob( jobid, var1, fileid ):
         database.setJobSubmitted( jobid, slurmid )
     else:
         raise (-1)
+
+#-------------------------------------------------------------------------------
+def run():
+    p = multiprocessing.Process( target=pipelineLoop )
+    p.start()
+    return p
+
+#-------------------------------------------------------------------------------
+def pipelineLoop():
+    try:
+        while (1 == 1):
+            time.sleep( 10 )
+            print "checking jobs"
+    except KeyboardInterrupt:
+        print "ending pipeline loop"
 
 #-------------------------------------------------------------------------------
