@@ -73,11 +73,12 @@ def pipelineLoop():
         while (1 == 1):
             time.sleep( 100 )
             jobs = database.getActiveJobs()
-            print "Checking jobs " + str(len(jobs))
+            if len(jobs) > 0:
+                print "Checking " + str(len(jobs)) + " job/s"
+
             for job in jobs:
                 jobid = job['jid']
                 newstate = checkSlurmJob( job['slurmid'] )
-                print newstate, job['slurmid']
                 if newstate == database.JOB_RUNNING and job['state'] != database.JOB_RUNNING:
                     database.setJobRunning( jobid )
 
