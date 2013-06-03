@@ -53,11 +53,50 @@ def run():
     return p
 
 #-------------------------------------------------------------------------------
+def checkSlurmJob( slurmid ):
+    command = ["ssh", remotehost, "mnq", "--job", str(slurmid) ]
+    proc = subprocess.Popen( command, stdout=subprocess.PIPE )
+    output = proc.communicate()[0]
+
+    if len(output.splitlines()) <= 1:
+        return database.JOB_COMPLETED
+
+    mm = re.search( "RUNNING", output )
+    if mm is not None:
+        return database.JOB_RUNNING
+
+    return database.JOB_SUBMITTED
+
+#-------------------------------------------------------------------------------
 def pipelineLoop():
     try:
         while (1 == 1):
             time.sleep( 100 )
-            print "checking jobs"
+            jobs = database.getActiveJobs()
+            print "Checking jobs " + str(len(jobs))
+            for job in jobs:
+                jobid = job['jid']
+                newstate = checkSlurmJob( job['slurmid'] )
+                print newstate, job['slurmid']
+                if newstate == database.JOB_RUNNING and job['state'] != database.JOB_RUNNING:
+                    database.setJobRunning( jobid )
+
+                if newstate == database.JOB_COMPLETED:
+                    userid = job['uid']
+                    slurmid = job['slurmid']
+                    # stageout
+                    outs = ["jor_"+str(slurmid)+".out", "jor_"+str(slurmid)+".err"]
+                    for fileoutname in outs:
+                        fileout = database.createFile( userid, fileoutname )
+                        database.addJobFile( jobid, fileout, database.FILEOUT )
+                        localfile = database.getFileFullName( fileout )
+                        (localdir, localbase) = os.path.split( localfile )
+                        remotedir = os.path.join( remotehome, localdir )
+                        remotefile = os.path.join( remotehome, localfile )
+                        os.system('scp "%s:%s" "%s"' % (remotehost, remotefile, localfile) )
+
+                    database.setJobCompleted( jobid )
+
     except KeyboardInterrupt:
         print "ending pipeline loop"
 
