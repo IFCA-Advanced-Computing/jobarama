@@ -95,6 +95,17 @@ def insertFile( user, filename ):
         raise DataBaseError
 
 #-------------------------------------------------------------------------------
+def createFile( userid, filename ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'INSERT INTO file VALUES (null,?,?,?)', (userid,0,filename) )
+    c.execute( 'SELECT last_insert_rowid() FROM file' )
+    fileid = c.fetchone()[0]
+    conn.commit()
+    conn.close()
+    return fileid
+
+#-------------------------------------------------------------------------------
 def getUserFiles( user ):
     files = []
     conn = sqlite3.connect( database )
