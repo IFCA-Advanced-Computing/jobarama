@@ -3,6 +3,7 @@ import sqlite3
 import bcrypt
 import os
 import shutil
+import data
 
 #-------------------------------------------------------------------------------
 BCRYPT_ROUNDS = 5
@@ -102,6 +103,24 @@ def getUserFiles( user ):
     conn.close()
 
     return files
+
+#-------------------------------------------------------------------------------
+def getFileFullName( fid ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'SELECT uid,filename FROM file WHERE fid=?', (fid,) )
+    fdata = c.fetchone()
+    if fdata is None:
+        conn.close()
+        raise DataBaseError
+
+    c.execute('SELECT name FROM user WHERE uid=?', (fdata[0],) )
+    udata = c.fetchone()
+    if udata is None:
+        conn.close()
+        raise DataBaseError
+
+    return data.getUserFilename( udata[0], fdata[1] )
 
 #-------------------------------------------------------------------------------
 def createJob( user ):

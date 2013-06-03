@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 import multiprocessing
 import os
-import os.path
+from os import path
 import config
 import database
 
@@ -23,7 +23,14 @@ def runjob( jobid, var1, fileid ):
     print "  fileid = " + str(fileid)
 
     # stagein
+    localfile = database.getFileFullName( fileid )
+    (localdir, localbase) = os.path.split( localfile )
+    remotedir = os.path.join( remotehome, localdir )
+    remotefile = os.path.join( remotehome, localfile )
+    os.system('ssh "%s" "mkdir -p %s"' % (remotehost, remotedir) )
+    os.system('scp "%s" "%s:%s"' % (localfile, remotehost, remotefile) )
+
+#-------------------------------------------------------------------------------
 
     # submit
 
-#-------------------------------------------------------------------------------
