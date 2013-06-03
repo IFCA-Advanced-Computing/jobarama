@@ -232,7 +232,7 @@ def getJobInfo( jobid ):
             conn.close()
             raise DataBaseError
 
-        files.append( {'name': fdata[0], 'type': jf[1] } )
+        files.append( {'fid': jf[0], 'name': fdata[0], 'type': jf[1] } )
 
     conn.close()
 
