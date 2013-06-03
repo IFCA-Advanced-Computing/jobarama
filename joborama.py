@@ -24,8 +24,8 @@ urls = (
     '/login', 'Login',
     '/login_error', 'LoginError',
     '/logout', 'Logout',
-    '/ajax/file', 'AjaxFile',
-    '/ajax/job', 'AjaxJob',
+    '/ajax/file', 'AjaxFiles',
+    '/ajax/job', 'AjaxJobs',
     '/job/(.*)', 'Job',
 )
 
@@ -100,7 +100,7 @@ class Logout:
         raise web.seeother('/')
 
 #-------------------------------------------------------------------------------
-class AjaxFile:
+class AjaxFiles:
     def GET( self ):
         if logged():
             web.header('Content-Type', 'application/json')
@@ -127,7 +127,7 @@ class AjaxFile:
             raise web.seeother('/')
 
 #-------------------------------------------------------------------------------
-class AjaxJob:
+class AjaxJobs:
     def GET( self ):
         if logged():
             web.header('Content-Type', 'application/json')
