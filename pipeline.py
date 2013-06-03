@@ -29,6 +29,7 @@ def runjob( jobid, var1, fileid ):
     remotefile = os.path.join( remotehome, localfile )
     os.system('ssh "%s" "mkdir -p %s"' % (remotehost, remotedir) )
     os.system('scp "%s" "%s:%s"' % (localfile, remotehost, remotefile) )
+    database.addJobFile( jobid, fileid, database.FILEIN )
 
 #-------------------------------------------------------------------------------
 
