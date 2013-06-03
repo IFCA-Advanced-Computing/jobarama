@@ -1,7 +1,13 @@
 #-------------------------------------------------------------------------------
-import random
-import database
 import multiprocessing
+import os
+import os.path
+import config
+import database
+
+#-------------------------------------------------------------------------------
+remotehost = config.REMOTEHOST
+remotehome = config.REMOTEHOME
 
 #-------------------------------------------------------------------------------
 def startJob( user, var1, fileid ):
