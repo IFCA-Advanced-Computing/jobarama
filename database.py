@@ -182,3 +182,30 @@ def setJobSubmitted( jobid, slurmid ):
     conn.close()
 
 #-------------------------------------------------------------------------------
+def getJobInfo( jobid ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute('SELECT state,slurmid FROM job WHERE jid=?', (jobid,) )
+    jdata = c.fetchone()
+    if jdata is None:
+        conn.close()
+        raise DataBaseError
+
+    c.execute('SELECT fid,jobfiletype FROM jobfile WHERE jid=?', (jobid,) )
+    jfiles = c.fetchall()
+
+    files = []
+    for jf in jfiles:
+        c.execute('SELECT filename FROM file WHERE fid=?', (jf[0],) )
+        fdata = c.fetchone()
+        if fdata is None:
+            conn.close()
+            raise DataBaseError
+
+        files.append( {'name': fdata[0], 'type': jf[1] } )
+
+    conn.close()
+
+    return { 'jobid': jobid, 'state': jdata[0], 'slurmid': jdata[1], 'files': files }
+
+#-------------------------------------------------------------------------------
