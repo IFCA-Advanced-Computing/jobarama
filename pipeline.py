@@ -56,7 +56,7 @@ def run():
 def pipelineLoop():
     try:
         while (1 == 1):
-            time.sleep( 10 )
+            time.sleep( 100 )
             print "checking jobs"
     except KeyboardInterrupt:
         print "ending pipeline loop"
