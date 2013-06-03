@@ -9,6 +9,12 @@ BCRYPT_ROUNDS = 5
 template = 'template.db'
 database = 'database.db'
 
+# JOB STATE
+#  0 = Just Created
+#  1 = Submitted
+#  2 = Running
+#  3 = Completed
+
 #-------------------------------------------------------------------------------
 def mkEmptyDatabase( dbname ):
     if os.path.isfile( dbname ):
@@ -24,14 +30,18 @@ def mkEmptyDatabase( dbname ):
     conn.commit()
 
     c.execute( "CREATE TABLE file (fid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER, global INTEGER, filename text)" )
-
     conn.commit()
 
-    c.execute( "CREATE TABLE job (jid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER)" )
-
+    c.execute( "CREATE TABLE job (jid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER, state INTEGER)" )
     conn.commit()
 
     conn.close()
+
+#-------------------------------------------------------------------------------
+def clearDB():
+    mkEmptyDatabase( template )
+    if os.path.isfile( database ):
+        os.remove( database )
 
 #-------------------------------------------------------------------------------
 def init():
@@ -100,7 +110,7 @@ def createJob( user ):
     c.execute( 'SELECT uid FROM user WHERE name=?', (user,) )
     uid = c.fetchone()
     if uid is not None:
-        c.execute( 'INSERT INTO job VALUES (null,?)', (uid[0],) )
+        c.execute( 'INSERT INTO job VALUES (null,?,0)', (uid[0],) )
         c.execute( 'SELECT last_insert_rowid() FROM job' )
         jobid = c.fetchone()[0]
         conn.commit()
