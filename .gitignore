@@ -1,4 +1,4 @@
 *.pyc
 /sessions/
-database.db
-/data/
+/ddbb/database.db
+/cache/
