@@ -236,3 +236,15 @@ def getJobInfo( jobid ):
     return { 'jobid': jobid, 'state': jdata[0], 'slurmid': jdata[1], 'files': files }
 
 #-------------------------------------------------------------------------------
+def getActiveJobs():
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'SELECT jid,uid,state,slurmid FROM job WHERE state=1 OR state=2' )
+    jdata = c.fetchall()
+    jobs = []
+    for j in jdata:
+        jobs.append( {'jid':j[0],'uid':j[1],'state':j[2],'slurmid':j[3]} )
+
+    return jobs
+
+#-------------------------------------------------------------------------------
