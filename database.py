@@ -16,6 +16,10 @@ database = 'ddbb/database.db'
 #  2 = Running
 #  3 = Completed
 
+# JOB FILE TYPE
+FILEIN = 0
+FILEOUT = 1
+
 #-------------------------------------------------------------------------------
 def mkEmptyDatabase( dbname ):
     if os.path.isfile( dbname ):
@@ -34,6 +38,9 @@ def mkEmptyDatabase( dbname ):
     conn.commit()
 
     c.execute( "CREATE TABLE job (jid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER, state INTEGER)" )
+    conn.commit()
+
+    c.execute( "CREATE TABLE jobfile (jid INTEGER, fid INTEGER, jobfiletype INTEGER, PRIMARY KEY(jid, fid) )" )
     conn.commit()
 
     conn.close()
@@ -155,5 +162,13 @@ def getUserJobs( user ):
     conn.close()
 
     return jobs
+
+#-------------------------------------------------------------------------------
+def addJobFile( jobid, fileid, jftype ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'INSERT INTO jobfile VALUES (?,?,?)', (jobid,fileid,jftype) )
+    conn.commit()
+    conn.close()
 
 #-------------------------------------------------------------------------------
