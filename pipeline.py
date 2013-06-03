@@ -2,12 +2,16 @@
 import multiprocessing
 import os
 from os import path
+import subprocess
+import re
 import config
 import database
 
 #-------------------------------------------------------------------------------
 remotehost = config.REMOTEHOST
 remotehome = config.REMOTEHOME
+
+reJOBID = re.compile(r"Submitted batch job (?P<slurmid>\d+)")
 
 #-------------------------------------------------------------------------------
 def startJob( user, var1, fileid ):
@@ -19,8 +23,6 @@ def startJob( user, var1, fileid ):
 #-------------------------------------------------------------------------------
 def runjob( jobid, var1, fileid ):
     print "RUNNING JOB " + str(jobid)
-    print "  var1 = " + var1
-    print "  fileid = " + str(fileid)
 
     # stagein
     localfile = database.getFileFullName( fileid )
@@ -31,7 +33,16 @@ def runjob( jobid, var1, fileid ):
     os.system('scp "%s" "%s:%s"' % (localfile, remotehost, remotefile) )
     database.addJobFile( jobid, fileid, database.FILEIN )
 
-#-------------------------------------------------------------------------------
-
     # submit
+    command = ["ssh", remotehost, "./launch_pipeline.sh", var1, remotefile ]
+    proc = subprocess.Popen( command, stdout=subprocess.PIPE )
+    output = proc.communicate()[0]
+    mm = reJOBID.search( output )
+    if mm:
+        slurmid = int(mm.group('slurmid'))
+        print "Slurm ID", str(slurmid)
+        database.setJobSubmitted( jobid, slurmid )
+    else:
+        raise (-1)
 
+#-------------------------------------------------------------------------------
