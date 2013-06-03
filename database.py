@@ -6,8 +6,8 @@ import shutil
 
 #-------------------------------------------------------------------------------
 BCRYPT_ROUNDS = 5
-template = 'template.db'
-database = 'database.db'
+template = 'ddbb/template.db'
+database = 'ddbb/database.db'
 
 # JOB STATE
 #  0 = Just Created
