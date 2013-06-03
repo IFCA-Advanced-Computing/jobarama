@@ -155,7 +155,9 @@ class File:
     def GET( self, fileid ):
         if logged():
             if database.isFileAllowedFromUser( fileid, session.user ):
-                return "get file " + str(fileid)
+                filename = database.getFileFullName( fileid )
+                with open( filename, "r" ) as f:
+                    return f.read()
             else:
                 return get_render().notallowed()
         else:
