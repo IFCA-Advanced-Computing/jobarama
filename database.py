@@ -127,6 +127,8 @@ def getFileFullName( fid ):
         conn.close()
         raise DataBaseError
 
+    conn.close()
+
     return data.getUserFilename( udata[0], fdata[1] )
 
 #-------------------------------------------------------------------------------
