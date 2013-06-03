@@ -45,10 +45,6 @@ def get_render():
         return web.template.render( 'templates/anom', base="layout" )
 
 #-------------------------------------------------------------------------------
-def getUserFilename( filename ):
-    return os.path.join( data.DATADIR, session.user, filename )
-
-#-------------------------------------------------------------------------------
 def clearSession():
     session.login = 0
     session.user = None
@@ -117,7 +113,7 @@ class AjaxFile:
             x = web.input(myfile={})
 
             try:
-                filename = getUserFilename( x['myfile'].filename )
+                filename = data.getUserFilename( session.user, x['myfile'].filename )
                 data.saveFile( filename, x['myfile'].file )
                 database.insertFile( session.user, x['myfile'].filename )
             except:
