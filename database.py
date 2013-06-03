@@ -37,7 +37,7 @@ def mkEmptyDatabase( dbname ):
     c.execute( "CREATE TABLE file (fid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER, global INTEGER, filename text)" )
     conn.commit()
 
-    c.execute( "CREATE TABLE job (jid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER, state INTEGER)" )
+    c.execute( "CREATE TABLE job (jid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER, state INTEGER, slurmid INTEGER)" )
     conn.commit()
 
     c.execute( "CREATE TABLE jobfile (jid INTEGER, fid INTEGER, jobfiletype INTEGER, PRIMARY KEY(jid, fid) )" )
@@ -136,7 +136,7 @@ def createJob( user ):
     c.execute( 'SELECT uid FROM user WHERE name=?', (user,) )
     uid = c.fetchone()
     if uid is not None:
-        c.execute( 'INSERT INTO job VALUES (null,?,0)', (uid[0],) )
+        c.execute( 'INSERT INTO job VALUES (null,?,0,-1)', (uid[0],) )
         c.execute( 'SELECT last_insert_rowid() FROM job' )
         jobid = c.fetchone()[0]
         conn.commit()
@@ -168,6 +168,14 @@ def addJobFile( jobid, fileid, jftype ):
     conn = sqlite3.connect( database )
     c = conn.cursor()
     c.execute( 'INSERT INTO jobfile VALUES (?,?,?)', (jobid,fileid,jftype) )
+    conn.commit()
+    conn.close()
+
+#-------------------------------------------------------------------------------
+def setJobSubmitted( jobid, slurmid ):
+    conn = sqlite3.connect( database )
+    c = conn.cursor()
+    c.execute( 'UPDATE job SET slurmid=?, state=1 WHERE jid=?', (slurmid,jobid) )
     conn.commit()
     conn.close()
 
