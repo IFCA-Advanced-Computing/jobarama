@@ -153,7 +153,8 @@ class AjaxJob:
 class Job:
     def GET( self, jobid ):
         if logged():
-            return get_render().job( jobid )
+            jobinfo = database.getJobInfo( jobid )
+            return get_render().job( jobinfo )
         else:
             raise web.seeother('/')
 

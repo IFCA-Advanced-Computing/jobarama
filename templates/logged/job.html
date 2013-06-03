@@ -1,4 +1,30 @@
-$def with( jobid )
+$def with( jobinfo )
 <div class="container-fluid">
-  <h2>Job $jobid Info</h2>
+  <h2>Job $jobinfo['jobid'] Info</h2>
+
+  <h3>Job State:
+    $if jobinfo['state'] == 0:
+        Just Created
+    $elif jobinfo['state'] == 1:
+        Submitted
+    $elif jobinfo['state'] == 1:
+        Running
+    $elif jobinfo['state'] == 1:
+        Completed
+    $else:
+        Unknown
+  </h3>
+  <h3>Job Input</h3>
+  <ul>
+    $for f in jobinfo['files']:
+        $if f['type'] == 0:
+            <li> $f['name'] </li>
+  </ul>
+
+  <h3>Job Output</h3>
+  <ul>
+    $for f in jobinfo['files']:
+        $if f['type'] == 1:
+            <li> $f['name'] </li>
+  </ul>
 </div> <!-- /container -->
