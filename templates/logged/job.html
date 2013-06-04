@@ -30,7 +30,7 @@ $def with( jobinfo )
           <ul class="well">
             $for f in jobinfo['files']:
                 $if f['type'] == 1:
-                    <li><a href="/file/$f['fid']"> $f['name'] </a></li>
+                    <li><a href="/file/$f['fid']/$f['name']"> $f['name'] </a></li>
           </ul>
         </div>
       </div>
