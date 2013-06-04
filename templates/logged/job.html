@@ -1,30 +1,39 @@
 $def with( jobinfo )
 <div class="container-fluid">
-  <h2>Job $jobinfo['jobid'] Info</h2>
+  <div class="row-fluid">
+    <div class="span12">
+      <h2>Job $jobinfo['jobid'] Info</h2>
 
-  <h3>Job State:
-    $if jobinfo['state'] == 0:
-        Just Created
-    $elif jobinfo['state'] == 1:
-        Submitted
-    $elif jobinfo['state'] == 2:
-        Running
-    $elif jobinfo['state'] == 3:
-        Completed
-    $else:
-        Unknown
-  </h3>
-  <h3>Job Input</h3>
-  <ul>
-    $for f in jobinfo['files']:
-        $if f['type'] == 0:
-            <li> $f['name'] </li>
-  </ul>
-
-  <h3>Job Output</h3>
-  <ul>
-    $for f in jobinfo['files']:
-        $if f['type'] == 1:
-            <li><a href="/file/$f['fid']"> $f['name'] </a></li>
-  </ul>
+      <h3>Job State:
+        $if jobinfo['state'] == 0:
+            <a class="btn btn-large disabled"><i class="icon-tasks"></i> Just Created</a>
+        $elif jobinfo['state'] == 1:
+            <a class="btn btn-large btn-info disabled"><i class="icon-tasks icon-white"></i> Submitted</a>
+        $elif jobinfo['state'] == 2:
+            <a class="btn btn-large btn-warning disabled"><i class="icon-cog icon-white"></i> Running</a>
+        $elif jobinfo['state'] == 3:
+            <a class="btn btn-large btn-success disabled"><i class="icon-ok-circle icon-white"></i> Completed</a>
+        $else:
+            <a class="btn btn-large btn-danger disabled"><i class="icon-warning-sign icon-white"></i> Unknown</a>
+      </h3>
+      <div class="row-fluid">
+        <div class="span6">
+          <h3>Job Input</h3>
+          <ul class="well">
+            $for f in jobinfo['files']:
+                $if f['type'] == 0:
+                    <li> $f['name'] </li>
+          </ul>
+        </div>
+        <div class="span6">
+          <h3>Job Output</h3>
+          <ul class="well">
+            $for f in jobinfo['files']:
+                $if f['type'] == 1:
+                    <li><a href="/file/$f['fid']"> $f['name'] </a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div> <!-- /container -->
